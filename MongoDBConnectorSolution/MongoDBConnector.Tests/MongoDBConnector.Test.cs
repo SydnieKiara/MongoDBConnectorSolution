@@ -2,7 +2,7 @@
 using Xunit;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
-using MongoDBConnector;  // important: reference your class library
+using MongoDBConnector;  // use the class library
 
 namespace MongoDBConnector.Tests
 {
@@ -19,14 +19,15 @@ namespace MongoDBConnector.Tests
                 .Build();
         }
 
-        public async Task InitializeAsync()
+        // xUnit 3 requires ValueTask for IAsyncLifetime
+        public ValueTask InitializeAsync()
         {
-            await _mongoDbContainer.StartAsync();
+            return new ValueTask(_mongoDbContainer.StartAsync());
         }
 
-        public async Task DisposeAsync()
+        public ValueTask DisposeAsync()
         {
-            await _mongoDbContainer.StopAsync();
+            return new ValueTask(_mongoDbContainer.StopAsync());
         }
 
         [Fact]
