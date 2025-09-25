@@ -3,6 +3,8 @@ using Xunit;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using MongoDBConnector;  // use the class library
+using Connector = MongoDBConnector.MongoDBConnector;
+
 
 namespace MongoDBConnector.Tests
 {
@@ -33,7 +35,7 @@ namespace MongoDBConnector.Tests
         [Fact]
         public void Ping_ReturnsTrue_WhenMongoDbIsRunning()
         {
-            var connector = new MongoDBConnector.MongoDBConnector(
+            var connector = new Connector(
                 $"mongodb://localhost:{_mongoDbContainer.GetMappedPublicPort(27017)}"
             );
 
@@ -43,7 +45,7 @@ namespace MongoDBConnector.Tests
         [Fact]
         public void Ping_ReturnsFalse_WhenMongoDbIsNotRunning()
         {
-            var connector = new MongoDBConnector.MongoDBConnector(
+            var connector = new Connector(
                 "mongodb://localhost:9999"
             );
 
