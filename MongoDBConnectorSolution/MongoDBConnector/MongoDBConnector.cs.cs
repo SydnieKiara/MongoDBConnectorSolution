@@ -7,13 +7,11 @@ namespace MongoDBConnector
     {
         private readonly string _connectionString;
 
-        // Constructor
         public MongoDBConnector(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        // Ping method
         public bool Ping()
         {
             try

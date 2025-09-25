@@ -2,9 +2,8 @@
 using Xunit;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
-using MongoDBConnector;  // use the class library
+using MongoDBConnector;  // alias to your class library
 using Connector = MongoDBConnector.MongoDBConnector;
-
 
 namespace MongoDBConnector.Tests
 {
@@ -21,12 +20,13 @@ namespace MongoDBConnector.Tests
                 .Build();
         }
 
-        // xUnit 3 requires ValueTask for IAsyncLifetime
+        // Setup before tests
         public ValueTask InitializeAsync()
         {
             return new ValueTask(_mongoDbContainer.StartAsync());
         }
 
+        // Cleanup after tests
         public ValueTask DisposeAsync()
         {
             return new ValueTask(_mongoDbContainer.StopAsync());
@@ -35,21 +35,25 @@ namespace MongoDBConnector.Tests
         [Fact]
         public void Ping_ReturnsTrue_WhenMongoDbIsRunning()
         {
-            var connector = new Connector(
-                $"mongodb://localhost:{_mongoDbContainer.GetMappedPublicPort(27017)}"
-            );
+            var port = _mongoDbContainer.GetMappedPublicPort(27017);
+            var connStr = $"mongodb://localhost:{port}";
+            var connector = new Connector(connStr);
 
-            Assert.True(connector.Ping());
+            var result = connector.Ping();
+
+            // Extra logging if it fails
+            Assert.True(result, $"Ping failed. Connection string used: {connStr}, Port: {port}");
         }
 
         [Fact]
         public void Ping_ReturnsFalse_WhenMongoDbIsNotRunning()
         {
-            var connector = new Connector(
-                "mongodb://localhost:9999"
-            );
+            var connStr = "mongodb://localhost:9999";
+            var connector = new Connector(connStr);
 
-            Assert.False(connector.Ping());
+            var result = connector.Ping();
+
+            Assert.False(result, $"Expected Ping to fail, but it succeeded. Connection string: {connStr}");
         }
     }
 }
