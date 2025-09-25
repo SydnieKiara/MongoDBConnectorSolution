@@ -17,6 +17,7 @@ namespace MongoDBConnector.Tests
                 .WithImage("mongo:6.0")
                 .WithPortBinding(27017, true)
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(27017))
+                .WithCleanUp(true) 
                 .Build();
         }
 
