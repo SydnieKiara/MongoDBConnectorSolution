@@ -1,8 +1,8 @@
-﻿nusing System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Xunit;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
-using MongoDBConnector;  // import class library
+using MongoDBConnector;  // important: reference your class library
 
 namespace MongoDBConnector.Tests
 {
